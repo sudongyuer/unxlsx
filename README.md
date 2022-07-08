@@ -4,7 +4,7 @@
 ## useage
 
 ```shell
-pnpm add -D @haiyaotec/generate-error-message
+pnpm add -D @imf/generate-error-message
 ```
 
 ```shell
