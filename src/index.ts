@@ -1,47 +1,57 @@
+import * as path from 'path'
 import { cwd } from 'process'
-import fs from 'fs'
-import path from 'path'
-import xlsx from 'xlsx'
 import chalk from 'chalk'
-import { program } from 'commander'
-// examples/basic-usage.js
-program
-  .option('-t, --target <path>', '指定错误文档的路径')
-  .option('-o, --output <path>', '指定生成ErrorMessage的存储路径')
-program.parse()
-const options = program.opts()
-const target = options.target
-const output = options.output
-const workbook = xlsx.readFile(path.resolve(cwd(), target))
-const sheetNames = workbook.SheetNames
-const sheet = workbook.Sheets[sheetNames[0]]
-const data = xlsx.utils.sheet_to_json(sheet)
-const EnErrorMessage = {}
-const InErrorMessage = {}
-data.forEach((item) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  if (item['后端接口错误码']) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    EnErrorMessage[item['后端接口错误码']] = item['英文文案']
-  }
+import fs from 'fs-extra'
+import { loadConfig } from 'unconfig'
+import xlsx from 'xlsx'
+
+interface file {
+  key: string
+  value: string
+  outPutFileDir: string
+}
+
+interface entry {
+  xlsxDir: string
+  files: Array<file>
+}
+interface generateConfig {
+  xlsxDirs: Array<entry>
+}
+
+const { config } = await loadConfig<generateConfig>({
+  sources: [
+    {
+      files: 'generate.config',
+      extensions: ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs', 'json', ''],
+    },
+  ],
 })
-data.forEach((item) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  if (item['后端接口错误码']) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    InErrorMessage[item['后端接口错误码']] = item['印尼语文案']
+
+const { xlsxDirs } = config
+
+for (let i = 0; i < xlsxDirs.length; i++) {
+  const { xlsxDir, files } = xlsxDirs[i]
+  const data = getXlsxData(xlsxDir)
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    const { key, value, outPutFileDir } = file
+    const result = {}
+    data.forEach((item: any) => {
+      result[item[key]] = item[value]
+    })
+    const str = `export default ${JSON.stringify(result, null, 2)}`
+    fs.outputFileSync(path.resolve(cwd(), `${outPutFileDir}`), str)
   }
-})
-const EnErrorMessageStr = `
-export default ${JSON.stringify(EnErrorMessage, null, 2)}
-`
-const InErrorMessageStr = `
-export default ${JSON.stringify(InErrorMessage, null, 2)}
-`
-fs.writeFileSync(path.resolve(cwd(), `${output}/EnErrorMessage.ts`), EnErrorMessageStr)
-fs.writeFileSync(path.resolve(cwd(), `${output}/InErrorMessage.ts`), InErrorMessageStr)
-console.warn(chalk.bgCyan('🦥 大哥消息生成完毕，小弟撤退了🚗~'))
+}
+
+function getXlsxData(xlsxDir) {
+  const workbook = xlsx.readFile(path.resolve(cwd(), xlsxDir))
+  const sheetNames = workbook.SheetNames
+  const sheet = workbook.Sheets[sheetNames[0]]
+  return xlsx.utils.sheet_to_json(sheet)
+}
+
+console.warn(chalk.bgCyan('Generate Success ✨ ✨ ✨'))
+process.exit(0)
+
