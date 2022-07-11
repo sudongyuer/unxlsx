@@ -40,10 +40,10 @@
     "dist"
   ],
   "scripts": {
-    "tscbuild": "rimraf ./dist && tsc",
+    "tscbuild": "imraf ./dist && tsc",
     "watch": "watch 'pnpm run tscbuild' ",
     "dev": "unbuild --stub",
-    "build": "unbuild",
+    "build": "pnpm run tscbuild",
     "test": "vitest",
     "changeset": "changeset add",
     "version": "changeset version",
