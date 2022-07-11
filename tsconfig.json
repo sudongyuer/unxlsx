@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es2019",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
+    "sourceMap": true,
     "lib": ["esnext"],
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
+    "outDir": "dist",
     "esModuleInterop": true,
-    "strict": true,
     "strictNullChecks": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true
-  }
+    "skipDefaultLibCheck": true,
+    "declaration": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "bin"
+  ]
 }
