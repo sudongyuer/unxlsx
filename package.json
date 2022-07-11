@@ -1,12 +1,15 @@
 {
   "name": "unxlsx",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "pnpm@7.1.5",
   "description": "Auto generate files from xlsx",
   "author": "sudongyuer",
   "license": "MIT",
-  "keywords": ["xlsx", "generate"],
+  "keywords": [
+    "xlsx",
+    "generate"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
