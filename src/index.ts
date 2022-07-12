@@ -15,6 +15,7 @@ interface entry {
   xlsxDir: string
   files: Array<file>
 }
+
 interface generateConfig {
   xlsxDirs: Array<entry>
 }
@@ -31,16 +32,42 @@ const { config } = await loadConfig<generateConfig>({
 const { xlsxDirs } = config
 
 for (let i = 0; i < xlsxDirs.length; i++) {
-  const { xlsxDir, files } = xlsxDirs[i]
+  const {
+    xlsxDir,
+    files,
+  } = xlsxDirs[i]
   const data = getXlsxData(xlsxDir)
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
-    const { key, value, outPutFileDir } = file
+    const {
+      key,
+      value,
+      outPutFileDir,
+    } = file
     const result = {}
+    const resultKeys = {}
     data.forEach((item: any) => {
       result[item[key]] = item[value]
+      resultKeys[item[key]] = item[key]
     })
-    const str = `export default ${JSON.stringify(result, null, 2)}`
+    const fileName = outPutFileDir.slice(outPutFileDir.lastIndexOf('/') === -1 ? 0 : outPutFileDir.lastIndexOf('/') + 1, outPutFileDir.lastIndexOf('.'))
+    let str = `const ${fileName} = ${JSON.stringify(result, null, 2)}\n`
+    str += `const ${fileName}Keys = ${JSON.stringify(resultKeys, null, 2)}\n`
+    str += `const get${fileName} = (key:string,...slots:Array<string>)=>{
+ if (slots && slots.length > 0) {
+    let i = 0
+    // @ts-expect-error
+    return ${fileName}[key].replace(/{[^{}]*}/g, () => {
+      return slots[i++]
+    })
+  }
+  else {
+    // @ts-expect-error
+    return ${fileName}[key]
+  }
+}\n`
+    str += `export {${fileName}Keys,get${fileName}}\n`
+    str += `export default ${fileName}\n`
     fs.outputFileSync(path.resolve(cwd(), `${outPutFileDir}`), str)
   }
 }
