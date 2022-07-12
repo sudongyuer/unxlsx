@@ -31,7 +31,7 @@ pnpm add -D unxlsx
   - outPutFileDir (require) : the file you want to generate to
 
 ```js
-import { defineGenerateConfig } from '@imf/generate-error-message/utils'
+import { defineGenerateConfig } from 'unxlsx/utils'
 export default defineGenerateConfig({
   xlsxDirs: [
     {
