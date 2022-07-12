@@ -1,5 +1,11 @@
 # unxlsx
 
+## 0.0.5
+
+### Patch Changes
+
+- 9f77c7a: fix: unconfig dep
+
 ## 0.0.4
 
 ### Patch Changes
