@@ -1,5 +1,11 @@
 # unxlsx
 
+## 0.0.6
+
+### Patch Changes
+
+- 235bd6c: feat: add slot support
+
 ## 0.0.5
 
 ### Patch Changes
