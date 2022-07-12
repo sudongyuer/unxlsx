@@ -1,5 +1,11 @@
 # unxlsx
 
+## 0.0.4
+
+### Patch Changes
+
+- d7cb6b8: update README.md
+
 ## 0.0.3
 
 ### Patch Changes

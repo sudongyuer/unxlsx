@@ -1,7 +1,7 @@
 {
   "name": "unxlsx",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "packageManager": "pnpm@7.1.5",
   "description": "Auto generate files from xlsx",
   "author": "sudongyuer",
