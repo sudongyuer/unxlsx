@@ -1,5 +1,11 @@
 # unxlsx
 
+## 0.0.7
+
+### Patch Changes
+
+- bb848ec: update slot support readme
+
 ## 0.0.6
 
 ### Patch Changes
