@@ -1,6 +1,6 @@
 # unxlsx
 
-A cli can automatically generate export files from Excel files.
+A cli can automatically generate files from Excel files.
 
 [![NPM version](https://img.shields.io/github/package-json/v/sudongyuer/unxlsx)](https://www.npmjs.com/package/unxlsx)
 
